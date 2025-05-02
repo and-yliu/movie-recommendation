@@ -32,3 +32,10 @@ similarity_score = similarity[movie_index]
 
 sorted_list = sorted(enumerate(similarity_score), key=lambda x: x[1], reverse=True)
 
+i = 0
+for movie in sorted_list:
+	print(get_title_from_index(movie[0]))
+	i=i+1
+	if i > 50:
+		break
+
