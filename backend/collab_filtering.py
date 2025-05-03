@@ -1,38 +1,55 @@
 import pandas as pd
 
-ratings = pd.read_csv("dataset/ratings.csv")
-movies = pd.read_csv("dataset/movies.csv")
+def collab_filtering(user):
 
-merged = pd.merge(movies, ratings).drop(["genres", "timestamp"], axis=1)
-print(merged.head())
+	ratings = pd.read_csv("../dataset/ratings.csv")
+	movies = pd.read_csv("../dataset/movies.csv")
 
-rating_table = merged.pivot(columns="movieId", index="userId", values="rating")
-rating_table.dropna(axis=1, thresh=10, inplace=True)
-rating_table.fillna(0, inplace=True)
+	merged = pd.merge(movies, ratings).drop(["genres", "timestamp"], axis=1)
 
+	rating_table = merged.pivot(columns="movieId", index="userId", values="rating")
+	rating_table.dropna(axis=1, thresh=10, inplace=True)
+	rating_table.fillna(0, inplace=True)
 
-similarity_df = rating_table.corr(method="pearson")
+	similarity_df = rating_table.corr(method="pearson")
+	similar_movies = pd.DataFrame()
 
-def get_similar_movie(movie_title, user_rating):
-	movie_id = movies[movies.title == movie_title]["movieId"].values[0]
-	similarity_score = similarity_df[movie_id] * (user_rating-2.5)
-	similarity_score.sort_values(ascending = False, inplace = True)
-	return similarity_score
+	def get_similar_movie(movie_title, user_rating):
+		movie_id = movies[movies.title == movie_title]["movieId"].values[0]
+		similarity_score = similarity_df[movie_id] * (user_rating-2.5)
+		similarity_score.sort_values(ascending = False, inplace = True)
+		return similarity_score
 
-fake_user = [("2 Fast 2 Furious (Fast and the Furious 2, The) (2003)", 5), ("12 Years a Slave (2013)", 4),
-			 ("2012 (2009)", 3), ("(500) Days of Summer (2009)", 2)]
+	for(movie_name, rating) in user:
+		row = get_similar_movie(movie_name, rating)
+		similar_movies = similar_movies._append(row, ignore_index=True)
 
-similar_movies = pd.DataFrame();
+	similar_movies = similar_movies.sum().sort_values(ascending = False)
 
-for(movie_name, rating) in fake_user:
-	row = get_similar_movie(movie_name, rating)
-	similar_movies = similar_movies._append(row, ignore_index=True)
+	similar_movies_df = similar_movies.reset_index()
+	similar_movies_df.columns = ['movieId', 'score']
 
-similar_movies = similar_movies.sum().sort_values(ascending = False)
+	similar_movies_with_titles = pd.merge(similar_movies_df, movies[['movieId', 'title']], on='movieId', how='left')
 
-similar_movies_df = similar_movies.reset_index()
-similar_movies_df.columns = ['movieId', 'score']
+	return similar_movies_with_titles
 
-similar_movies_with_titles = pd.merge(similar_movies_df, movies[['movieId', 'title']], on='movieId', how='left')
+def movie_seen(movie, user):
+	for(movie_name, rating) in user:
+		if(movie_name == movie):
+			return True
+	return False
 
-print(similar_movies_with_titles)
+def movie_recommandation(user):
+	movies_df = collab_filtering(user)
+	movies = movies_df["title"]
+
+	movies_unseen = []
+	for movie in movies:
+		if not movie_seen(movie, user):
+			movies_unseen.append(movie)
+
+	if len(movies_unseen) > 50:
+		movies_unseen = movies_unseen[0:50]      
+
+	print(movies_unseen)
+	return movies_unseen
