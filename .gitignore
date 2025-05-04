@@ -2,4 +2,4 @@ __pycache__/
 .DS_Store
 .idea/
 .venv/
-.frontend/public/posters/
+frontend/public/posters/

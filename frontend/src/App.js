@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import "./App.css";
 import Header from "./component/Header";
+import Recommendation from "./component/Recommendation";
 
 function App() {
     // usestate for setting a javascript
@@ -22,6 +23,7 @@ function App() {
     return (
         <>
             <Header/>
+            <Recommendation/>
         </>
     );
 }
