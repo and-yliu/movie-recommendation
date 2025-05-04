@@ -1,9 +1,13 @@
+import os
 import pandas as pd
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATASET_DIR = os.path.join(BASE_DIR, '../dataset')
 
 def collab_filtering(user):
 
-	ratings = pd.read_csv("../dataset/ratings.csv")
-	movies = pd.read_csv("../dataset/movies.csv")
+	ratings = pd.read_csv(os.path.join(DATASET_DIR, "ratings.csv"))
+	movies = pd.read_csv(os.path.join(DATASET_DIR, "movies.csv"))
 
 	merged = pd.merge(movies, ratings).drop(["genres", "timestamp"], axis=1)
 
@@ -20,7 +24,7 @@ def collab_filtering(user):
 		similarity_score.sort_values(ascending = False, inplace = True)
 		return similarity_score
 
-	for(movie_name, rating) in user:
+	for movie_name, rating in user.items():
 		row = get_similar_movie(movie_name, rating)
 		similar_movies = similar_movies._append(row, ignore_index=True)
 
@@ -34,8 +38,8 @@ def collab_filtering(user):
 	return similar_movies_with_titles
 
 def movie_seen(movie, user):
-	for(movie_name, rating) in user:
-		if(movie_name == movie):
+	for movie_name, rating in user.items():
+		if movie_name == movie:
 			return True
 	return False
 
@@ -50,6 +54,5 @@ def movie_recommandation(user):
 
 	if len(movies_unseen) > 50:
 		movies_unseen = movies_unseen[0:50]      
-
-	print(movies_unseen)
+	
 	return movies_unseen

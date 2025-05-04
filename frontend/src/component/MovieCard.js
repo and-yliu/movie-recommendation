@@ -12,7 +12,7 @@ const MovieCard = (props) => {
             />
             <div className="p-4 w-full flex flex-col items-center">
                 <p
-                  className="text-lg font-semibold text-gray-800 text-center truncate max-w-[13rem]"
+                  className="text-lg font-semibold text-gray-800 text-center break-words"
                   title={props.title}
                 >
                   {props.title}

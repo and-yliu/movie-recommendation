@@ -1,20 +1,32 @@
-from flask import Flask
+from flask import Flask, request
 import datetime
 import collab_filtering
+from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
+from pymongo.server_api import ServerApi
+
+load_dotenv()
 
 x = datetime.datetime.now()
 
 # Initializing flask app
 app = Flask(__name__)
 
+MONGODB_URI = os.getenv("MONGODB_URI")
+client = MongoClient(MONGODB_URI, server_api=ServerApi('1'))
+
+collection = client['movieRecommendation']['user']
+
 
 # Route for seeing a data
-@app.route('/data')
-def get_time():
-    fake_user = [("2 Fast 2 Furious (Fast and the Furious 2, The) (2003)", 5), ("12 Years a Slave (2013)", 4),
-			("2012 (2009)", 3), ("(500) Days of Summer (2009)", 2)]
-    # Returning an api for showing in  reactjs
-    return collab_filtering.movie_recommandation(fake_user)
+@app.route('/rating/<int:userID>', methods=['PUT'])
+def get_recommendation(userID):
+    data = request.get_json();
+    rating = data.get('rating', {})
+    result = collection.update_one({ "userId": userID }, { "$set": { "rating": rating } })
+    user = collection.find_one({ "userId": userID })
+    return collab_filtering.movie_recommandation(user['rating'])
 
     
 # Running app
