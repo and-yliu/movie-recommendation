@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import MovieCard from './MovieCard'
 
 const Recommendation = (props) => {
@@ -20,6 +20,21 @@ const Recommendation = (props) => {
                     ))}
                 </div>
             </div>
+            <h1 className="text-3xl font-bold text-center text-gray-800 mb-8 mt-10">
+                Most Watched
+            </h1>
+            <div className="max-w-6xl mx-auto px-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+                    {props.trendList.map((movie) => (
+                        <MovieCard
+                            key={movie['movieId']}
+                            title={movie['title']}
+                            genres={movie['genres']}
+                            movieId={movie['movieId']}
+                        />
+                    ))}
+                </div>
+            </div> 
         </div>
     )
 }

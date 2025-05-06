@@ -22,11 +22,19 @@ collection = client['movieRecommendation']['user']
 # Route for seeing a data
 @app.route('/rating/<int:userID>', methods=['PUT'])
 def get_recommendation(userID):
-    data = request.get_json();
+    data = request.get_json()
     rating = data.get('rating', {})
     result = collection.update_one({ "userId": userID }, { "$set": { "rating": rating } })
     user = collection.find_one({ "userId": userID })
     return collab_filtering.movie_recommandation(user['rating'])
+
+@app.route('/trending')
+def get_trending():
+    return collab_filtering.trending()
+
+@app.route('/movies')
+def get_movies():
+    return collab_filtering.all_movie()
 
     
 # Running app

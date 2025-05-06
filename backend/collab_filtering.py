@@ -4,8 +4,7 @@ import pandas as pd
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASET_DIR = os.path.join(BASE_DIR, '../dataset')
 
-def collab_filtering(user):
-
+def get_rating_table():
 	ratings = pd.read_csv(os.path.join(DATASET_DIR, "ratings.csv"))
 	movies = pd.read_csv(os.path.join(DATASET_DIR, "movies.csv"))
 
@@ -14,6 +13,50 @@ def collab_filtering(user):
 	rating_table = merged.pivot(columns="movieId", index="userId", values="rating")
 	rating_table.dropna(axis=1, thresh=10, inplace=True)
 	rating_table.fillna(0, inplace=True)
+
+	return rating_table
+
+
+def all_movie():
+	movies = pd.read_csv(os.path.join(DATASET_DIR, "movies.csv"))
+
+	rating_table = get_rating_table()
+	filtered_movies = rating_table.sum(axis=0)
+
+	movie_df = filtered_movies.reset_index()
+	movie_df.columns = ['movieId', 'score']
+
+	all_movies = []
+	for movieId in movie_df["movieId"]:
+		all_movies.append(movies[movies.movieId == movieId]["title"].values[0])
+	print(all_movies)
+	return all_movies
+
+def trending():
+	movies = pd.read_csv(os.path.join(DATASET_DIR, "movies.csv"))
+
+	rating_table = get_rating_table()
+
+	trend = rating_table.sum(axis=0).sort_values(ascending = False)
+
+	trend_df = trend.reset_index()
+	trend_df.columns = ['movieId', 'score']
+
+	movie_trend = []
+	i = 0
+	for movieId in trend_df["movieId"]:
+		movie_trend.append(movies[movies.movieId == movieId]["title"].values[0])
+		i=i+1
+		if(i >= 8):
+			break
+	return movie_trend
+
+
+
+def collab_filtering(user):
+	movies = pd.read_csv(os.path.join(DATASET_DIR, "movies.csv"))
+
+	rating_table = get_rating_table()
 
 	similarity_df = rating_table.corr(method="pearson")
 	similar_movies = pd.DataFrame()
@@ -52,7 +95,7 @@ def movie_recommandation(user):
 		if not movie_seen(movie, user):
 			movies_unseen.append(movie)
 
-	if len(movies_unseen) > 50:
-		movies_unseen = movies_unseen[0:50]      
+	if len(movies_unseen) > 12:
+		movies_unseen = movies_unseen[0:12]      
 	
 	return movies_unseen
