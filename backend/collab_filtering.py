@@ -29,7 +29,6 @@ def all_movie():
 	all_movies = []
 	for movieId in movie_df["movieId"]:
 		all_movies.append(movies[movies.movieId == movieId]["title"].values[0])
-	print(all_movies)
 	return all_movies
 
 def trending():
