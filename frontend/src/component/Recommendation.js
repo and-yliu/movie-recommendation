@@ -5,7 +5,7 @@ const Recommendation = (props) => {
 
     return (
         <div className="bg-gray-50 min-h-screen py-8">
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+            <h1 className="text-4xl font-extrabold text-center text-purple-700 mb-8 drop-shadow">
                 Recommendations For You
             </h1>
             <div className="max-w-6xl mx-auto px-4">
@@ -20,7 +20,7 @@ const Recommendation = (props) => {
                     ))}
                 </div>
             </div>
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-8 mt-10">
+            <h1 className="text-3xl font-bold text-center text-blue-600 mb-8 mt-10 drop-shadow">
                 Most Watched
             </h1>
             <div className="max-w-6xl mx-auto px-4">

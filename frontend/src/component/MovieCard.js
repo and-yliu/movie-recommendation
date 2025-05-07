@@ -4,7 +4,7 @@ const MovieCard = (props) => {
     const poster = "/posters/" + props.movieId + ".jpg"
 
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden w-60 m-4 flex flex-col items-center">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden w-64 m-4 flex flex-col items-center transform hover:scale-105 hover:shadow-2xl transition duration-300">
             <img
                 src={poster}
                 alt={props.title}
@@ -12,7 +12,7 @@ const MovieCard = (props) => {
             />
             <div className="p-4 w-full flex flex-col items-center">
                 <p
-                  className="text-lg font-semibold text-gray-800 text-center break-words"
+                  className="text-lg font-bold text-gray-800 text-center break-words"
                   title={props.title}
                 >
                   {props.title}

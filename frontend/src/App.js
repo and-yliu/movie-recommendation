@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import "./App.css";
 import Header from "./component/Header";
 import Recommendation from "./component/Recommendation";
+import RatingList from "./component/RatingList";
 
 function App() {
     const [dataset, setDataset] = useState([]);
@@ -138,11 +139,13 @@ function App() {
     }, [dataset]);
 
     return (
-        <>
-            {console.log(trendList)}
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100">
             <Header movies={movies} ratings={ratings} setRatings={setRatings}/>
-            <Recommendation trendList={trendList} movielist={movielist}/>
-        </>
+            <RatingList ratings={ratings} setRatings={setRatings} />
+            <main className="max-w-7xl mx-auto px-4 mt-10">
+                <Recommendation trendList={trendList} movielist={movielist}/>
+            </main>
+        </div>
     );
 }
 
