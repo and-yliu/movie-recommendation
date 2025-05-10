@@ -51,7 +51,6 @@ def trending():
 	return movie_trend
 
 
-
 def collab_filtering(user):
 	movies = pd.read_csv(os.path.join(DATASET_DIR, "movies.csv"))
 

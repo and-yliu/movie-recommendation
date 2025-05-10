@@ -90,6 +90,15 @@ function App() {
         .catch((err) => console.error("Failed to load movie list", err));
     }, []);
 
+    function getMovieInfo(data, func){
+      const list = [];
+      data.forEach((movieTitle) =>{
+        const movie = dataset.find(m => m.title === movieTitle);
+        if (movie) list.push(movie);
+      })
+      func(list);
+    }
+
     // Using useEffect for single rendering
     useEffect(() => {
         if (Object.keys(ratings).length === 0) return;
@@ -102,12 +111,7 @@ function App() {
         }).then((res) =>
             res.json().then((data) => {
                 // Setting a data from api
-                const recommendation = [];
-                data.forEach((movieTitle) =>{
-                  const movie = dataset.find(m => m.title === movieTitle);
-                  recommendation.push(movie);
-                })
-                setMovielist(recommendation);
+                getMovieInfo(data, setMovielist);
             })
         );
     }, [ratings, dataset]);
@@ -115,12 +119,7 @@ function App() {
     useEffect(() => {
       fetch('/trending').then((res) => {
         res.json().then((data) => {
-          const trending = [];
-          data.forEach((movieTitle) => {
-            const movie = dataset.find(m => m.title === movieTitle);
-            if (movie) trending.push(movie);
-          });
-          setTrendList(trending);
+          getMovieInfo(data, setTrendList);
         });
       });
     }, [dataset]);
@@ -128,12 +127,7 @@ function App() {
     useEffect(() => {
       fetch('/movies').then((res) => {
         res.json().then((data) => {
-          const all_movies = [];
-          data.forEach((movieTitle) => {
-            const movie = dataset.find(m => m.title === movieTitle);
-            if (movie) all_movies.push(movie);
-          });
-          setMovies(all_movies);
+          getMovieInfo(data, setMovies);
         });
       });
     }, [dataset]);
