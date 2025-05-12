@@ -3,9 +3,11 @@ import "./App.css";
 import Header from "./component/Header";
 import Recommendation from "./component/Recommendation";
 import RatingList from "./component/RatingList";
+import User from "./component/User";
 
 function App() {
     const [dataset, setDataset] = useState([]);
+    const [username, setUsername] = useState("");
     const [movies, setMovies] = useState([]);
     const [ratings, setRatings] = useState({});
     const [trendList, setTrendList] = useState([]);
@@ -133,6 +135,8 @@ function App() {
     }, [dataset]);
 
     return (
+      <>
+        <User username={username} setUsername={setUsername}/>
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100">
             <Header movies={movies} ratings={ratings} setRatings={setRatings}/>
             <RatingList ratings={ratings} setRatings={setRatings} />
@@ -140,6 +144,7 @@ function App() {
                 <Recommendation trendList={trendList} movielist={movielist}/>
             </main>
         </div>
+      </>
     );
 }
 
