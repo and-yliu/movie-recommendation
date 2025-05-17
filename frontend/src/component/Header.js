@@ -37,7 +37,15 @@ const Header = (props) => {
     <>
       <header className="bg-gradient-to-r from-blue-600 to-purple-500 shadow-lg">
         <nav className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-3xl font-extrabold text-white tracking-wide drop-shadow-lg">Movie Recommendation</div>
+          <div className="text-3xl font-extrabold text-white tracking-wide drop-shadow-lg">
+            Movie Recommendation
+          </div>
+          <button
+            onClick={() => props.setUser("")}
+            className="ml-4 px-4 py-2 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100 transition"
+          >
+            Log Out
+          </button>
         </nav>
       </header>
       <div className="bg-white/80 py-8 rounded-b-2xl shadow-md">
